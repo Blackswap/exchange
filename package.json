@@ -1,13 +1,13 @@
 {
-  "name": "@pancakeswap/interface",
-  "description": "Pancakeswap Interface",
+  "name": "@blackswap/exchange",
+  "description": "Blackswap exchange",
   "homepage": ".",
   "private": true,
   "dependencies": {
     "@crowdin/crowdin-api-client": "^1.8.16",
     "@ethersproject/experimental": "^5.0.1",
     "@pancakeswap-libs/sdk": "1.0.1",
-    "@pancakeswap-libs/uikit": "^0.10.7",
+    "@blackswap/uikit": "^0.10.7",
     "@popperjs/core": "^2.4.4",
     "@reach/dialog": "^0.10.3",
     "@reach/portal": "^0.10.3",

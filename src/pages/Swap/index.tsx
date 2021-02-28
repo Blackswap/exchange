@@ -1,7 +1,7 @@
 import { CurrencyAmount, JSBI, Token, Trade } from '@pancakeswap-libs/sdk'
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { ArrowDown } from 'react-feather'
-import { CardBody, ArrowDownIcon, Button, IconButton, Text } from '@pancakeswap-libs/uikit'
+import { CardBody, ArrowDownIcon, Button, IconButton, Text } from '@blackswap/uikit'
 import { ThemeContext } from 'styled-components'
 import AddressInputPanel from 'components/AddressInputPanel'
 import Card, { GreyCard } from 'components/Card'
@@ -31,13 +31,14 @@ import { LinkStyledButton } from 'components/Shared'
 import { maxAmountSpend } from 'utils/maxAmountSpend'
 import { computeTradePriceBreakdown, warningSeverity } from 'utils/prices'
 import Loader from 'components/Loader'
-import { TranslateString } from 'utils/translateTextHelpers'
 import PageHeader from 'components/PageHeader'
 import ConnectWalletButton from 'components/ConnectWalletButton'
+import {useTranslation} from "react-i18next";
 import AppBody from '../AppBody'
 
 const Swap = () => {
   const loadedUrlParams = useDefaultsFromURLSearch()
+  const { t } = useTranslation()
 
   // token warning stuff
   const [loadedInputCurrency, loadedOutputCurrency] = [
@@ -283,14 +284,14 @@ const Swap = () => {
             swapErrorMessage={swapErrorMessage}
             onDismiss={handleConfirmDismiss}
           />
-          <PageHeader title="Exchange" description="Trade tokens in an instant" />
+          <PageHeader title={ t('swap.title', 'Exchange') } description={ t('swap.header', 'Trade tokens in an instant') } />
           <CardBody>
             <AutoColumn gap="md">
               <CurrencyInputPanel
                 label={
                   independentField === Field.OUTPUT && !showWrap && trade
                     ? 'From (estimated)'
-                    : TranslateString(76, 'From')
+                    : t('swap.form', 'From')
                 }
                 value={formattedAmounts[Field.INPUT]}
                 showMaxButton={!atMaxAmountInput}
@@ -327,7 +328,7 @@ const Swap = () => {
                 value={formattedAmounts[Field.OUTPUT]}
                 onUserInput={handleTypeOutput}
                 label={
-                  independentField === Field.INPUT && !showWrap && trade ? 'To (estimated)' : TranslateString(80, 'To')
+                  independentField === Field.INPUT && !showWrap && trade ? 'To (estimated)' : t('swap.to', 'To')
                 }
                 showMaxButton={false}
                 currency={currencies[Field.OUTPUT]}

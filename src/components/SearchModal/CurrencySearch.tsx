@@ -1,6 +1,6 @@
 import { Currency, ETHER, Token } from '@pancakeswap-libs/sdk'
 import React, { KeyboardEvent, RefObject, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
-import { Text, CloseIcon } from '@pancakeswap-libs/uikit'
+import { Text, CloseIcon } from '@blackswap/uikit'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { FixedSizeList } from 'react-window'
@@ -23,8 +23,6 @@ import { filterTokens } from './filtering'
 import SortButton from './SortButton'
 import { useTokenComparator } from './sorting'
 import { PaddedColumn, SearchInput, Separator } from './styleds'
-import TranslatedText from '../TranslatedText'
-import { TranslateString } from '../../utils/translateTextHelpers'
 
 interface CurrencySearchProps {
   isOpen: boolean
@@ -143,12 +141,9 @@ export function CurrencySearch({
       <PaddedColumn gap="14px">
         <RowBetween>
           <Text>
-            <TranslatedText translationId={82}>Select a token</TranslatedText>
+            { t('currency_search.select_token','Select a token')}
             <QuestionHelper
-              text={TranslateString(
-                130,
-                'Find a token by searching for its name or symbol or by pasting its address below.'
-              )}
+              text={t('currency_search.question_helper', 'Find a token by searching for its name or symbol or by pasting its address below.')}
             />
           </Text>
           <CloseIcon onClick={onDismiss} />
@@ -167,7 +162,7 @@ export function CurrencySearch({
         )}
         <RowBetween>
           <Text fontSize="14px">
-            <TranslatedText translationId={126}>Token name</TranslatedText>
+            { t('currency_search.token_name','Token name')}
           </Text>
           <SortButton ascending={invertSearchOrder} toggleSortOrder={() => setInvertSearchOrder((iso) => !iso)} />
         </RowBetween>
@@ -213,7 +208,7 @@ export function CurrencySearch({
                 onClick={onChangeList}
                 id="currency-search-change-list-button"
               >
-                {selectedListInfo.current ? 'Change' : 'Select a list'}
+                {selectedListInfo.current ?  t('currency_search.change','Change') : t('currency_search.select_list','Select a list')}
               </LinkStyledButton>
             </RowBetween>
           </Card>

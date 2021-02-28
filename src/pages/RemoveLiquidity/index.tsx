@@ -4,12 +4,13 @@ import { splitSignature } from '@ethersproject/bytes'
 import { Contract } from '@ethersproject/contracts'
 import { TransactionResponse } from '@ethersproject/providers'
 import { Currency, currencyEquals, ETHER, Percent, WETH } from '@pancakeswap-libs/sdk'
-import { Button, Flex, Text } from '@pancakeswap-libs/uikit'
+import { Button, Flex, Text } from '@blackswap/uikit'
 import { ArrowDown, Plus } from 'react-feather'
 import { RouteComponentProps } from 'react-router'
 
 import { BigNumber } from '@ethersproject/bignumber'
 import ConnectWalletButton from 'components/ConnectWalletButton'
+import {useTranslation} from "react-i18next";
 import { AutoColumn, ColumnCenter } from '../../components/Column'
 import TransactionConfirmationModal, { ConfirmationModalContent } from '../../components/TransactionConfirmationModal'
 import CurrencyInputPanel from '../../components/CurrencyInputPanel'
@@ -66,6 +67,7 @@ export default function RemoveLiquidity({
   ])
 
   const theme = useContext(ThemeContext)
+  const { t } = useTranslation()
 
   // burn state
   const { independentField, typedValue } = useBurnState()
@@ -344,11 +346,8 @@ export default function RemoveLiquidity({
             </Text>
           </RowFixed>
         </RowBetween>
-
         <Text small color="textSubtle" textAlign="left" padding="12px 0 0 0" style={{ fontStyle: 'italic' }}>
-          {`Output is estimated. If the price changes by more than ${
-            allowedSlippage / 100
-          }% your transaction will revert.`}
+          { t('add_liquidity.estimated_output', 'Output is estimated. If the price changes by more than ')} {allowedSlippage / 100}{ t('add_liquidity.revert', '% your transaction will revert.')}
         </Text>
       </AutoColumn>
     )

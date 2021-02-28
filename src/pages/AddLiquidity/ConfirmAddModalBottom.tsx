@@ -1,6 +1,7 @@
 import { Currency, CurrencyAmount, Fraction, Percent } from '@pancakeswap-libs/sdk'
 import React from 'react'
-import { Button, Text } from '@pancakeswap-libs/uikit'
+import { Button, Text } from '@blackswap/uikit'
+import {useTranslation} from "react-i18next";
 import { RowBetween, RowFixed } from '../../components/Row'
 import CurrencyLogo from '../../components/CurrencyLogo'
 import { Field } from '../../state/mint/actions'
@@ -20,7 +21,9 @@ export function ConfirmAddModalBottom({
   poolTokenPercentage?: Percent
   onAdd: () => void
 }) {
-  return (
+    const { t } = useTranslation()
+
+    return (
     <>
       <RowBetween>
         <Text>{currencies[Field.CURRENCY_A]?.symbol} Deposited</Text>
@@ -56,7 +59,7 @@ export function ConfirmAddModalBottom({
         <Text>{noLiquidity ? '100' : poolTokenPercentage?.toSignificant(4)}%</Text>
       </RowBetween>
       <Button mt="20px" onClick={onAdd}>
-        {noLiquidity ? 'Create Pool & Supply' : 'Confirm Supply'}
+        {noLiquidity ? t('add_liquidity.create_and_supply', 'Create Pool & Supply' ): t('add_liquidity.confirm_and_supply','Confirm Supply')}
       </Button>
     </>
   )

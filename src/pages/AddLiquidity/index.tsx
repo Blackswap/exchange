@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react'
 import { BigNumber } from '@ethersproject/bignumber'
 import { TransactionResponse } from '@ethersproject/providers'
 import { Currency, currencyEquals, ETHER, TokenAmount, WETH } from '@pancakeswap-libs/sdk'
-import { Button, CardBody, AddIcon, Text as UIKitText } from '@pancakeswap-libs/uikit'
+import { Button, CardBody, AddIcon, Text as UIKitText } from '@blackswap/uikit'
 import { RouteComponentProps } from 'react-router-dom'
 import { LightCard } from 'components/Card'
 import { AutoColumn, ColumnCenter } from 'components/Column'
@@ -29,6 +29,7 @@ import { wrappedCurrency } from 'utils/wrappedCurrency'
 import { currencyId } from 'utils/currencyId'
 import Pane from 'components/Pane'
 import ConnectWalletButton from 'components/ConnectWalletButton'
+import {useTranslation} from "react-i18next";
 import AppBody from '../AppBody'
 import { Dots, Wrapper } from '../Pool/styleds'
 import { ConfirmAddModalBottom } from './ConfirmAddModalBottom'
@@ -44,6 +45,7 @@ export default function AddLiquidity({
   const { account, chainId, library } = useActiveWeb3React()
   const currencyA = useCurrency(currencyIdA)
   const currencyB = useCurrency(currencyIdB)
+  const { t } = useTranslation()
 
   const oneCurrencyIsWETH = Boolean(
     chainId &&
@@ -224,9 +226,7 @@ export default function AddLiquidity({
           </UIKitText>
         </Row>
         <UIKitText small textAlign="left" padding="8px 0 0 0 " style={{ fontStyle: 'italic' }}>
-          {`Output is estimated. If the price changes by more than ${
-            allowedSlippage / 100
-          }% your transaction will revert.`}
+          { t('add_liquidity.estimated_output')} {allowedSlippage / 100} {t('add_liquidity.revert')}
         </UIKitText>
       </AutoColumn>
     )
@@ -298,7 +298,7 @@ export default function AddLiquidity({
             hash={txHash}
             content={() => (
               <ConfirmationModalContent
-                title={noLiquidity ? 'You are creating a pool' : 'You will receive'}
+                title={noLiquidity ? t('add_liquidity.creating_pool', 'You are creating a pool') : t('add_liquidity.will_receive','You will receive')}
                 onDismiss={handleDismissConfirmation}
                 topContent={modalHeader}
                 bottomContent={modalBottom}
@@ -312,9 +312,9 @@ export default function AddLiquidity({
                 <ColumnCenter>
                   <Pane>
                     <AutoColumn gap="12px">
-                      <UIKitText>You are the first liquidity provider.</UIKitText>
-                      <UIKitText>The ratio of tokens you add will set the price of this pool.</UIKitText>
-                      <UIKitText>Once you are happy with the rate click supply to review.</UIKitText>
+                      <UIKitText>{ t('add_liquidity.first_provider', 'You are the first liquidity provider.')}</UIKitText>
+                      <UIKitText>{ t('add_liquidity.ratio_to_pool', 'The ratio of tokens you add will set the price of this pool.')}</UIKitText>
+                      <UIKitText>{ t('add_liquidity.supply_review', 'Once you are happy with the rate click supply to review.')}</UIKitText>
                     </AutoColumn>
                   </Pane>
                 </ColumnCenter>
@@ -354,7 +354,7 @@ export default function AddLiquidity({
                     fontSize="12px"
                     mb="2px"
                   >
-                    {noLiquidity ? 'Initial prices and pool share' : 'Prices and pool share'}
+                    {noLiquidity ? t('add_liquidity.initial_price','Initial prices and pool share' ): t('add_liquidity.price_and_pool','Prices and pool share')}
                   </UIKitText>
                   <Pane>
                     <PoolPriceBar

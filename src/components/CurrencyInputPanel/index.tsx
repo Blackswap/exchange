@@ -1,8 +1,9 @@
 import React, { useState, useCallback } from 'react'
 import { Currency, Pair } from '@pancakeswap-libs/sdk'
-import { Button, ChevronDownIcon, Text } from '@pancakeswap-libs/uikit'
+import { Button, ChevronDownIcon, Text } from '@blackswap/uikit'
 import styled from 'styled-components'
 import { darken } from 'polished'
+import {useTranslation} from "react-i18next";
 import { useCurrencyBalance } from '../../state/wallet/hooks'
 import CurrencySearchModal from '../SearchModal/CurrencySearchModal'
 import CurrencyLogo from '../CurrencyLogo'
@@ -10,8 +11,6 @@ import DoubleCurrencyLogo from '../DoubleLogo'
 import { RowBetween } from '../Row'
 import { Input as NumericalInput } from '../NumericalInput'
 import { useActiveWeb3React } from '../../hooks'
-import TranslatedText from "../TranslatedText"
-import { TranslateString } from '../../utils/translateTextHelpers'
 
 const InputRow = styled.div<{ selected: boolean }>`
   display: flex;
@@ -97,7 +96,7 @@ export default function CurrencyInputPanel({
   onUserInput,
   onMax,
   showMaxButton,
-  label = TranslateString(132, 'Input'),
+  label = 'Input',
   onCurrencySelect,
   currency,
   disableCurrencySelect = false,
@@ -115,6 +114,7 @@ export default function CurrencyInputPanel({
   const handleDismissSearch = useCallback(() => {
     setModalOpen(false)
   }, [setModalOpen])
+  const { t } = useTranslation()
 
   return (
     <InputPanel id={id}>
@@ -175,7 +175,7 @@ export default function CurrencyInputPanel({
                     ? `${currency.symbol.slice(0, 4) 
                       }...${ 
                       currency.symbol.slice(currency.symbol.length - 5, currency.symbol.length)}`
-                    : currency?.symbol) || <TranslatedText translationId={82}>Select a currency</TranslatedText>}
+                    : currency?.symbol) || t('currency.input.select_currency','Select a currency') }
                 </Text>
               )}
               {!disableCurrencySelect && <ChevronDownIcon />}

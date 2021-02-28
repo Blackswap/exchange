@@ -15,7 +15,7 @@ import { RedirectPathToSwapOnly } from './Swap/redirects'
 import { EN, allLanguages } from '../constants/localisation/languageCodes'
 import { LanguageContext } from '../hooks/LanguageContext'
 import { TranslationsContext } from '../hooks/TranslationsContext'
-
+import { images, cacheKey } from '../config/app'
 import Menu from '../components/Menu'
 
 const AppWrapper = styled.div`
@@ -36,7 +36,7 @@ const BodyWrapper = styled.div`
   overflow-x: hidden;
   z-index: 1;
   justify-content: center;
-  background-image: url('/images/group-pancake.svg');
+  background-image: url('${images.hero.mobile}');
   background-repeat: no-repeat;
   background-position: bottom 24px center;
   background-size: 90%;
@@ -46,11 +46,10 @@ const BodyWrapper = styled.div`
   }
 
   ${({ theme }) => theme.mediaQueries.lg} {
-    background-image: url('/images/arch-${({ theme }) => (theme.isDark ? 'dark' : 'light')}.svg'),
-      url('/images/left-pancake.svg'), url('/images/right-pancake.svg');
+    background-image: url('${images.hero.left}'), url('${images.hero.right}');
     background-repeat: no-repeat;
-    background-position: center 420px, 10% 230px, 90% 230px;
-    background-size: contain, 266px, 266px;
+    background-position: 10% 230px, 90% 230px;
+    background-size: 266px, 266px;
     min-height: 90vh;
   }
 `
@@ -63,15 +62,6 @@ export default function App() {
   const [selectedLanguage, setSelectedLanguage] = useState<any>(undefined)
   const [translatedLanguage, setTranslatedLanguage] = useState<any>(undefined)
   const [translations, setTranslations] = useState<Array<any>>([])
-  const apiKey = `${process.env.REACT_APP_CROWDIN_APIKEY}`
-  const projectId = parseInt(`${process.env.REACT_APP_CROWDIN_PROJECTID}`)
-  const fileId = 6
-
-  const credentials: Credentials = {
-    token: apiKey,
-  }
-
-  const stringTranslationsApi = new StringTranslations(credentials)
 
   const getStoredLang = (storedLangCode: string) => {
     return allLanguages.filter((language) => {
@@ -80,7 +70,7 @@ export default function App() {
   }
 
   useEffect(() => {
-    const storedLangCode = localStorage.getItem('pancakeSwapLanguage')
+    const storedLangCode = localStorage.getItem(cacheKey)
     if (storedLangCode) {
       const storedLang = getStoredLang(storedLangCode)
       setSelectedLanguage(storedLang)
@@ -88,30 +78,6 @@ export default function App() {
       setSelectedLanguage(EN)
     }
   }, [])
-
-  const fetchTranslationsForSelectedLanguage = async () => {
-    stringTranslationsApi
-      .listLanguageTranslations(projectId, selectedLanguage.code, undefined, fileId, 200)
-      .then((translationApiResponse) => {
-        if (translationApiResponse.data.length < 1) {
-          setTranslations(['error'])
-        } else {
-          setTranslations(translationApiResponse.data)
-        }
-      })
-      .then(() => setTranslatedLanguage(selectedLanguage))
-      .catch((error) => {
-        setTranslations(['error'])
-        console.error(error)
-      })
-  }
-
-  useEffect(() => {
-    if (selectedLanguage) {
-      fetchTranslationsForSelectedLanguage()
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedLanguage])
 
   return (
     <Suspense fallback={null}>

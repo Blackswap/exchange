@@ -1,6 +1,6 @@
 import { Currency, ETHER, JSBI, TokenAmount } from '@pancakeswap-libs/sdk'
 import React, { useCallback, useEffect, useState } from 'react'
-import { Button, ChevronDownIcon, AddIcon, CardBody, Text } from '@pancakeswap-libs/uikit'
+import { Button, ChevronDownIcon, AddIcon, CardBody, Text } from '@blackswap/uikit'
 import CardNav from 'components/CardNav'
 import { LightCard } from 'components/Card'
 import { AutoColumn, ColumnCenter } from 'components/Column'
@@ -14,7 +14,7 @@ import { usePairAdder } from 'state/user/hooks'
 import { useTokenBalance } from 'state/wallet/hooks'
 import { StyledInternalLink } from 'components/Shared'
 import { currencyId } from 'utils/currencyId'
-import TranslatedText from 'components/TranslatedText'
+import {useTranslation} from "react-i18next";
 import AppBody from '../AppBody'
 import { Dots } from '../Pool/styleds'
 
@@ -25,6 +25,7 @@ enum Fields {
 
 export default function PoolFinder() {
   const { account } = useActiveWeb3React()
+  const { t } = useTranslation()
 
   const [showSearch, setShowSearch] = useState<boolean>(false)
   const [activeField, setActiveField] = useState<number>(Fields.TOKEN1)
@@ -70,7 +71,7 @@ export default function PoolFinder() {
   const prerequisiteMessage = (
     <LightCard padding="45px 10px">
       <Text style={{ textAlign: 'center' }}>
-        {!account ? 'Connect to a wallet to find pools' : 'Select a token to find your liquidity.'}
+        {!account ? t('pool_finder.connect','Connect to a wallet to find pools') : t('pool_finder.find_liquidity', 'Select a token to find your liquidity.') }
       </Text>
     </LightCard>
   )
@@ -91,7 +92,7 @@ export default function PoolFinder() {
               endIcon={<ChevronDownIcon width="24px" color="white" />}
               fullWidth
             >
-              {currency0 ? currency0.symbol : <TranslatedText translationId={82}>Select a Token</TranslatedText>}
+              {currency0 ? currency0.symbol : t('pool_finder.select_token','Select a token') }
             </Button>
 
             <ColumnCenter>
@@ -107,7 +108,7 @@ export default function PoolFinder() {
               endIcon={<ChevronDownIcon width="24px" color="white" />}
               fullWidth
             >
-              {currency1 ? currency1.symbol : <TranslatedText translationId={82}>Select a Token</TranslatedText>}
+              {currency1 ? currency1.symbol : t('pool_finder.select_token','Select a token') }}
             </Button>
 
             {hasPosition && (
@@ -125,10 +126,12 @@ export default function PoolFinder() {
                 ) : (
                   <LightCard padding="45px 10px">
                     <AutoColumn gap="sm" justify="center">
-                      <Text style={{ textAlign: 'center' }}>You don’t have liquidity in this pool yet.</Text>
+                      <Text style={{ textAlign: 'center' }}>
+                        {t('pool_finder.no_liquidity', 'You don’t have liquidity in this pool yet.')}
+                      </Text>
                       <StyledInternalLink to={`/add/${currencyId(currency0)}/${currencyId(currency1)}`}>
                         <Text style={{ textAlign: 'center' }}>
-                          <TranslatedText translationId={100}>Add Liquidity</TranslatedText>
+                          {t('pool_finder.add_liquidity', 'Add Liquidity')}
                         </Text>
                       </StyledInternalLink>
                     </AutoColumn>
@@ -139,7 +142,7 @@ export default function PoolFinder() {
                   <AutoColumn gap="sm" justify="center">
                     <Text style={{ textAlign: 'center' }}>No pool found.</Text>
                     <StyledInternalLink to={`/add/${currencyId(currency0)}/${currencyId(currency1)}`}>
-                      Create pool.
+                      {t('pool_finder.create_pool', 'Create pool.')}
                     </StyledInternalLink>
                   </AutoColumn>
                 </LightCard>
@@ -147,7 +150,7 @@ export default function PoolFinder() {
                 <LightCard padding="45px 10px">
                   <AutoColumn gap="sm" justify="center">
                     <Text style={{ textAlign: 'center' }}>
-                      <TranslatedText translationId={136}>Invalid pair.</TranslatedText>
+                      { t('pool_finder.invalid_pair', 'Invalid pair.')}
                     </Text>
                   </AutoColumn>
                 </LightCard>

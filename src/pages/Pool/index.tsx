@@ -1,7 +1,7 @@
 import React, { useContext, useMemo } from 'react'
 import { ThemeContext } from 'styled-components'
 import { Pair } from '@pancakeswap-libs/sdk'
-import { Button, CardBody, Text } from '@pancakeswap-libs/uikit'
+import { Button, CardBody, Text } from '@blackswap/uikit'
 import { Link } from 'react-router-dom'
 import CardNav from 'components/CardNav'
 import Question from 'components/QuestionHelper'
@@ -16,14 +16,14 @@ import { useActiveWeb3React } from 'hooks'
 import { usePairs } from 'data/Reserves'
 import { toV2LiquidityToken, useTrackedTokenPairs } from 'state/user/hooks'
 import { Dots } from 'components/swap/styleds'
-import TranslatedText from 'components/TranslatedText'
-import { TranslateString } from 'utils/translateTextHelpers'
 import PageHeader from 'components/PageHeader'
+import {useTranslation} from "react-i18next";
 import AppBody from '../AppBody'
 
 export default function Pool() {
   const theme = useContext(ThemeContext)
   const { account } = useActiveWeb3React()
+  const { t } = useTranslation()
 
   // fetch the user's balances of all tracked V2 LP tokens
   const trackedTokenPairs = useTrackedTokenPairs()
@@ -58,9 +58,9 @@ export default function Pool() {
     <>
       <CardNav activeIndex={1} />
       <AppBody>
-        <PageHeader title="Liquidity" description="Add liquidity to receive LP tokens">
+        <PageHeader title={t('pool.header', 'Liquidity')} description={t('pool.header_desc', 'Add liquidity to receive LP tokens')}>
           <Button id="join-pool-button" as={Link} to="/add/ETH">
-            <TranslatedText translationId={100}>Add Liquidity</TranslatedText>
+            {t('pool.add_liquidity', 'Add Liquidity')}
           </Button>
         </PageHeader>
         <AutoColumn gap="lg" justify="center">
@@ -68,11 +68,11 @@ export default function Pool() {
             <AutoColumn gap="12px" style={{ width: '100%' }}>
               <RowBetween padding="0 8px">
                 <Text color={theme.colors.text}>
-                  <TranslatedText translationId={102}>Your Liquidity</TranslatedText>
+                  {t('pool.liquidity', 'Your Liquidity')}
                 </Text>
                 <Question
-                  text={TranslateString(
-                    130,
+                  text={t(
+                    'pool.liquidity_help',
                     'When you add liquidity, you are given pool tokens that represent your share. If you don’t see a pool you joined in this list, try importing a pool below.'
                   )}
                 />
@@ -81,7 +81,7 @@ export default function Pool() {
               {!account ? (
                 <LightCard padding="40px">
                   <Text color="textDisabled" textAlign="center">
-                    Connect to a wallet to view your liquidity.
+                    {t('pool.connect', 'Connect to a wallet to view your liquidity.')}
                   </Text>
                 </LightCard>
               ) : v2IsLoading ? (
@@ -99,20 +99,20 @@ export default function Pool() {
               ) : (
                 <LightCard padding="40px">
                   <Text color="textDisabled" textAlign="center">
-                    <TranslatedText translationId={104}>No liquidity found.</TranslatedText>
+                    {t('pool.no_liquidity', 'No liquidity found.')}
                   </Text>
                 </LightCard>
               )}
 
               <div>
                 <Text fontSize="14px" style={{ padding: '.5rem 0 .5rem 0' }}>
-                  {TranslateString(106, "Don't see a pool you joined?")}{' '}
+                  {t('pool.dont_see_pool', "Don't see a pool you joined?")}{' '}
                   <StyledInternalLink id="import-pool-link" to="/find">
-                    {TranslateString(108, 'Import it.')}
+                    {t('pool.import_it', 'Import it.')}
                   </StyledInternalLink>
                 </Text>
                 <Text fontSize="14px" style={{ padding: '.5rem 0 .5rem 0' }}>
-                  Or, if you staked your FLIP tokens in a farm, unstake them to see them here.
+                  {t('pool.unstake_help', 'Or, if you staked your FLIP tokens in a farm, unstake them to see them here.')}
                 </Text>
               </div>
             </AutoColumn>

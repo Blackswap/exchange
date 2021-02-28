@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { Button, Flex, Input, Text } from '@pancakeswap-libs/uikit'
+import { Button, Flex, Input, Text } from '@blackswap/uikit'
 import { useUserSlippageTolerance } from 'state/user/hooks'
+import {useTranslation} from "react-i18next";
 import QuestionHelper from '../QuestionHelper'
-import TranslatedText from '../TranslatedText'
 
 const MAX_SLIPPAGE = 5000
 const RISKY_SLIPPAGE_LOW = 50
@@ -51,6 +51,7 @@ const SlippageToleranceSettings = () => {
   const [userSlippageTolerance, setUserslippageTolerance] = useUserSlippageTolerance()
   const [value, setValue] = useState(userSlippageTolerance / 100)
   const [error, setError] = useState<string | null>(null)
+  const { t } = useTranslation()
 
   const handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const { value: inputValue } = evt.target
@@ -65,29 +66,29 @@ const SlippageToleranceSettings = () => {
         setUserslippageTolerance(rawValue)
         setError(null)
       } else {
-        setError('Enter a valid slippage percentage')
+        setError(t('slippage.enter_valid_slippage', 'Enter a valid slippage percentage.'))
       }
     } catch {
-      setError('Enter a valid slippage percentage')
+      setError(t('slippage.enter_valid_slippage', 'Enter a valid slippage percentage.'))
     }
-  }, [value, setError, setUserslippageTolerance])
+  }, [value, setError, setUserslippageTolerance, t])
 
   // Notify user if slippage is risky
   useEffect(() => {
     if (userSlippageTolerance < RISKY_SLIPPAGE_LOW) {
-      setError('Your transaction may fail')
+      setError(t('slippage.transaction_may_failed', 'Your transaction may fail'))
     } else if (userSlippageTolerance > RISKY_SLIPPAGE_HIGH) {
-      setError('Your transaction may be frontrun')
+      setError(t('slippage.transaction_may_frontrun', 'Your transaction may be frontrun'))
     }
-  }, [userSlippageTolerance, setError])
+  }, [userSlippageTolerance, setError, t])
 
   return (
     <StyledSlippageToleranceSettings>
       <Label>
         <Text style={{ fontWeight: 600 }}>
-          <TranslatedText translationId={88}>Slippage tolerance</TranslatedText>
+          { t('slippage.tolerance', 'Slippage tolerance') }
         </Text>
-        <QuestionHelper text="Your transaction will revert if the price changes unfavorably by more than this percentage." />
+        <QuestionHelper text={ t('slippage.question_helper', 'Your transaction will revert if the price changes unfavorably by more than this percentage.')} />
       </Label>
       <Options>
         <Flex mb={['8px', 0]} mr={[0, '8px']}>

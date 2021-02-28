@@ -1,23 +1,29 @@
-import i18next from 'i18next'
+import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
-import XHR from 'i18next-xhr-backend'
-import LanguageDetector from 'i18next-browser-languagedetector'
+import { cacheKey } from './config/app'
 
-i18next
-  .use(XHR)
-  .use(LanguageDetector)
-  .use(initReactI18next)
-  .init({
-    backend: {
-      loadPath: `./locales/{{lng}}.json`
+import fr from './lang/fr.json'
+import en from './lang/en.json'
+// the translations
+// (tip move them in a JSON file and import them)
+const resources = {
+    en: {
+        translation: en,
     },
-    react: {
-      useSuspense: true
+    fr: {
+        translation: fr,
     },
-    fallbackLng: 'en',
-    preload: ['en'],
-    keySeparator: false,
-    interpolation: { escapeValue: false }
-  })
+}
+const storedLangCode = localStorage.getItem(cacheKey)
 
-export default i18next
+i18n
+    .use(initReactI18next) // passes i18n down to react-i18next
+    .init({
+        resources,
+        lng: storedLangCode ?? 'en',
+        interpolation: {
+            escapeValue: false, // react already safes from xss
+        },
+    })
+
+export default i18n

@@ -108,7 +108,7 @@ export default function PoolFinder() {
               endIcon={<ChevronDownIcon width="24px" color="white" />}
               fullWidth
             >
-              {currency1 ? currency1.symbol : t('pool_finder.select_token','Select a token') }}
+              {currency1 ? currency1.symbol : t('pool_finder.select_token','Select a token') }
             </Button>
 
             {hasPosition && (
